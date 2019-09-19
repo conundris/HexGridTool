@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+	<title>Simple jQuery Hex Grid widget for game prototyping</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="keywords" content="jquery opensource hexgrid hex grid" />
+    <meta name="description" content="A simple jQuery Hex grid Widget, implemented using SVG, for prototyping hex-grid based games." />
+    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-responsive.min.css" rel="stylesheet">
+		<link href="https://netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css" rel="stylesheet">
+		<script src="https://code.jquery.com/jquery-2.1.4.min.js" ></script>
+    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+
+	<script src="js/hexgridwidget.js" ></script>
+    <script src="js/tuple.js"></script>
+
+	<style type="text/css">
+	svg {}
+	.hexfield {
+	  fill: transparent;
+	  stroke: yellowgreen;
+	  stroke-width: 1;
+	}
+	.hexfield:focus {
+	  outline:none;
+	}
+	.hexfield:hover {
+	  fill: green;
+	}
+	.hexfield:active {
+	  fill: red;
+	  outline: none;
+	}
+	.hexfield.clicked{
+	  fill: black;
+	}
+	</style>
+</head>
+
+<body>
+<div class="container">
+	<div class="hero-unit">
+			<h1>Hex Grid Widget</h1>
+	</div>
+	<div class="row">
+		<div class="span6" style="text-align:center">
+			<div id="container"> </div>
+			<h2><small id="logger">click around the grid</small></h2>
+		</div>
+		<div class="span6">
+			<form class="form-horizontal" onsubmit="return false;">
+				<div class="control-group">
+					<label class="control-label">Rows</label>
+					<div class="controls">
+						<input class="input" id="rows" placeholder="Rows" value="5"/>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">Columns</label> 
+					<div class="controls">
+						<input class="input" id="columns" placeholder="Columns" value="10"/>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">Radius</label> 
+					<div class="controls">
+						<input	class="input" id="radius" placeholder="Radius" value="20"/>
+					</div>
+				</div>
+				<div class="control-group">
+					<div class="controls">
+						<button class="btn" id="rebuild">Rebuild</button>
+					</div>
+                    <div class="controls">
+                        <button class="btn" id="debug">Debug</button>
+                    </div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<script>
+
+    var dataPoints = [];
+	<!-- main initialisation -->
+    var debug = function() {
+        console.log(dataPoints);
+    }
+
+	var rebuild = function () {
+		var
+				radius = parseInt($('#radius').val()),
+				columns = parseInt($('#columns').val()),
+				rows = parseInt($('#rows').val()),
+				cssClass = 'hexfield';
+
+        dataPoints = [];
+
+		$('#container').empty().hexGridWidget(radius, columns, rows, cssClass).on('hexclick', function (e) {
+
+		    var column = e[0].column;
+		    var row = e[0].row;
+
+		    //console.log('polygon [hex-row="' + e[0].row + '"] [hex-column="' + e[0].column + '"]');
+            //console.log(e.target.querySelector('polygon[hex-row="' + e[0].row + '"][hex-column="' + e[0].column + '"]'));
+            var selectedItem = e.target.querySelector('polygon[hex-row="' + row + '"][hex-column="' + column + '"]');
+            //console.log(e.target.querySelectorAll('polygon[hex-row="' + e[0].row + '"]'));
+
+            //console.log(this.querySelector())
+
+            console.log(selectedItem.classList);
+            console.log(selectedItem.classList[0]);
+
+            if(selectedItem.classList.toggle("clicked")) {
+                $('#logger').text('selected [' + column + ',' + row + '] hex');
+                dataPoints.push(new Tuple(row, column));
+            } else {
+                $('#logger').text('deselected [' + column + ',' + row + '] hex');
+                dataPoints = arrayRemove(dataPoints, new Tuple(row, column));
+            }
+		});
+
+
+        function arrayRemove(arr, value) {
+            console.log(arr);
+            console.log(value);
+            return arr.filter(x => !x.equals(value));
+        }
+	};
+
+	$('#rebuild').click(rebuild);
+	rebuild();
+
+	$('#debug').click(debug);
+
+</script>
+</body>
+</html>
