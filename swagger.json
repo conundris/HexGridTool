@@ -1,0 +1,76 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "HexGridTool",
+    "description": "A sample API that uses a petstore as an example to demonstrate features in the swagger-2.0 specification",
+    "termsOfService": "http://swagger.io/terms/",
+    "contact": {
+      "name": "Swagger API Team"
+    },
+    "license": {
+      "name": "MIT"
+    }
+  },
+  "host": "localhost",
+  "basePath": "/users",
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/users": {
+      "get": {
+        "description": "Returns all pets from the system that the user has access to",
+        "operationId": "findPets",
+        "produces": [
+          "application/json",
+          "application/xml",
+          "text/xml",
+          "text/html"
+        ],
+        "responses": {
+          "200": {
+            "description": "pet response"
+          },
+          "default": {
+            "description": "unexpected error"
+          }
+        }
+      },
+      "post": {
+        "description": "Creates Hex Data",
+        "operationId": "addPet",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "pet",
+            "in": "body",
+            "description": "Pet to add to the store",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "pet response"
+          },
+          "default": {
+            "description": "unexpected error"
+          }
+        }
+      }
+    }
+  }
+}
