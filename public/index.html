@@ -76,6 +76,12 @@
                     <div class="controls">
                         <button class="btn" id="debug">Debug</button>
                     </div>
+					<div class="controls">
+						<button class="btn" id="send">Send Data</button>
+					</div>
+                    <div class="controls">
+                        <button class="btn" id="get">Get Data</button>
+                    </div>	
 				</div>
 			</form>
 		</div>
@@ -135,6 +141,33 @@
 	rebuild();
 
 	$('#debug').click(debug);
+	
+	$("#send").click(function(){
+    $.ajax({
+            type: 'POST',
+            url: "http://localhost:3001/users",
+            contentType: "application/json",
+            data: dataPoints //TODO: transfer tuples into JSON format
+            dataType: 'json',
+            success: function(result){
+                console.log(result);
+            }
+        });
+	});
+	
+	
+	
+	
+	$('#get').click(function(){
+    $.ajax({
+            url: "http://localhost:3001/users",
+            contentType: "application/json",
+            dataType: 'json',
+            success: function(result){
+                console.log(result);
+            }
+        });
+	});
 
 </script>
 </body>
