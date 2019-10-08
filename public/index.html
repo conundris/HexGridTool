@@ -91,6 +91,7 @@
 <script>
 
     var dataPoints = [];
+		
 	<!-- main initialisation -->
     var debug = function() {
         console.log(dataPoints);
@@ -147,7 +148,7 @@
             type: 'POST',
             url: "http://localhost:3001/users",
             contentType: "application/json",
-            data: dataPoints //TODO: transfer tuples into JSON format
+            data: JSON.stringify({'dateTime' : Date.now(), 'data' : dataPoints}),
             dataType: 'json',
             success: function(result){
                 console.log(result);
@@ -160,6 +161,7 @@
 	
 	$('#get').click(function(){
     $.ajax({
+		type: 'GET',
             url: "http://localhost:3001/users",
             contentType: "application/json",
             dataType: 'json',
